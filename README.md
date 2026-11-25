@@ -26,14 +26,47 @@ The iOS application communicates with a Node.js backend through REST APIs. The b
 
 ## Getting Started
 
-### Backend
+### 1. Backend Setup
+
+Navigate to the backend directory:
 
 ```bash
 cd officeworks-backend
 npm install
 ```
 
-Configure environment variables using `.env.example`, then start the backend:
+### 2. Environment Configuration
+
+Create a `.env` file in the `officeworks-backend` directory using `.env.example` as a reference.
+
+Configure the following variables:
+
+```env
+EMAIL_MODE=resend
+SALES_EMAIL=your-email@example.com
+RESEND_API_KEY=your-resend-api-key
+```
+
+| Variable | Description |
+|---|---|
+| `EMAIL_MODE` | Email delivery mode: `console` or `resend` |
+| `SALES_EMAIL` | Recipient email address for enquiries |
+| `RESEND_API_KEY` | API key generated from Resend |
+
+For local testing without actual email delivery, use:
+
+```env
+EMAIL_MODE=console
+SALES_EMAIL=sales@example.com
+```
+
+In console mode, enquiry email content is printed in the backend terminal.
+
+**Note:** Resend's test sender supports delivery to permitted verified recipients. A verified sending domain is required for sending to arbitrary recipients.
+
+Never commit `.env` files or API credentials to version control.
+
+### 3. Start Backend
 
 ```bash
 npx tsx src/server.ts
@@ -41,11 +74,27 @@ npx tsx src/server.ts
 
 Backend URL: `http://localhost:3000`
 
-### iOS Application
+Health check:
 
-Open `Officeworks-iOSClient.xcodeproj` in Xcode.
+```bash
+curl http://localhost:3000/health
+```
 
-Ensure the backend is running and the development API URL is configured before launching the application in an iOS Simulator.
+### 4. Run iOS Application
+
+1. Open `Officeworks-iOSClient.xcodeproj` in Xcode.
+2. Select the development scheme.
+3. Verify the API base URL in `Development.xcconfig`.
+4. Ensure the backend is running.
+5. Select an iOS Simulator and run the application.
+
+Development API URL:
+
+```text
+http://localhost:3000/api
+```
+
+For a physical device, configure the API URL using your development machine's reachable IP address.
 
 Refer to the [iOS README](Officeworks-iOSClient/README.md) for detailed setup and testing instructions.
 
